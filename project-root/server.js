@@ -8,6 +8,7 @@ const ProductImage = require('./src/models/ProductImage');
 const ProductOption = require('./src/models/ProductOption');
 const ProductCategory = require('./src/models/ProductCategory');
 
+
 const app = express();
 const PORT = 3000;
 
@@ -350,8 +351,8 @@ app.get('/v1/product/:id', async (req, res) => {
     try {
       const product = await Product.findByPk(id, {
         include: [
-          { model: ProductImage, attributes: ['id', 'content'] },
-          { model: ProductOption, attributes: ['id', 'value'] },
+          { model: ProductImage, attributes: ['id'] },
+          { model: ProductOption, attributes: ['id', 'values'] },
           { model: Category, attributes: ['id'] } // Inclua Category diretamente
         ]
       });
