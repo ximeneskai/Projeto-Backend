@@ -7,6 +7,8 @@ const Product = require('./src/models/Product');
 const ProductImage = require('./src/models/ProductImage');
 const ProductOption = require('./src/models/ProductOption');
 const ProductCategory = require('./src/models/ProductCategory');
+const App = require('./src/app');
+require('dotenv').config();
 
 
 const app = express();
@@ -570,3 +572,4 @@ app.delete('/v1/product/:id', async (req, res) => {
         message: 'Erro interno do servidor', error: error.message });
     } });
   
+
