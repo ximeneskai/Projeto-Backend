@@ -469,3 +469,103 @@ app.post('/v1/product', async (req, res) => {
     }
   });
 
+//ATUALIZAÇÃO DO PRODUTO 
+app.put('/v1/product/:id', async (req, res) => {
+    const { id } = req.params;
+    const {
+      enabled,
+      name,
+      slug,
+      stock,
+      description,
+      price,
+      price_with_discount,
+      category_ids,
+      images,
+      options,
+    } = req.body;
+  
+    try {
+      // Encontrar o produto pelo ID
+      const product = await Product.findByPk(id);
+      
+      if (!product) {
+        return res.status(404).json({ message: 'Produto não encontrado' });
+      }
+  
+      // Atualizar informações do produto
+      await product.update({
+        enabled,
+        name,
+        slug,
+        stock,
+        description,
+        price,
+        price_with_discount,
+      });
+  
+      // Atualizar as categorias associadas (se necessário)
+      if (category_ids) {
+        await product.setCategories(category_ids); // Ajuste conforme o relacionamento definido
+      }
+  
+      // Atualizar as imagens associadas (se necessário)
+      if (images) {
+        for (const image of images) {
+          if (image.deleted) {
+            await ProductImage.destroy({ where: { id: image.id } });
+          } else {
+            await ProductImage.upsert({
+              id: image.id,
+              type: image.type,
+              content: image.content,
+              productId: id
+            });
+          }
+        }
+      }
+  
+      // Atualizar as opções associadas (se necessário)
+      if (options) {
+        for (const option of options) {
+          if (option.deleted) {
+            await ProductOption.destroy({ where: { id: option.id } });
+          } else {
+            await ProductOption.upsert({
+              id: option.id,
+              title: option.title,
+              shape: option.shape,
+              radius: option.radius,
+              type: option.type,
+              value: option.value,
+              productId: id
+            });
+          }
+        }
+      }
+  
+      // Responder com uma mensagem de sucesso
+      res.status(204).send({ message: "Produto atualizado com sucesso!"}); // No Content
+    } catch (error) {
+      console.error('Erro ao atualizar produto:', error);
+      res.status(400).json({ message: 'Erro ao atualizar produto', error: error.message });
+    }
+  });
+
+// DELETAR PRODUTO
+app.delete('/v1/product/:id', async (req, res) => {
+    const { id } = req.params;
+      try {
+      const product = await Product.findByPk(id);
+      if (!product) {
+        return res.status(404).json({ message: 'Produto não encontrado' });
+      }
+      await product.destroy();
+      res.status(200).json({ message: 'Produto deletado com sucesso.'
+      }); } catch (error) {
+      console.error('Erro ao deletar produto:', error);
+      // Tratar casos de erro inesperado
+      res.status(500).json({ 
+        message: 'Erro interno do servidor', error: error.message });
+    } });
+  
