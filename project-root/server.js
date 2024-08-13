@@ -8,6 +8,8 @@ const ProductImage = require('./src/models/ProductImage');
 const ProductOption = require('./src/models/ProductOption');
 const ProductCategory = require('./src/models/ProductCategory');
 const App = require('./src/app');
+const AuthService = require('./src/services/AuthService');
+const authMiddleware = require('./src/middleware/AuthMiddleware');
 require('dotenv').config();
 
 
@@ -54,7 +56,7 @@ app.get('/v1/user/:id', async (req, res) => {
 
 
 // ROTA PARA CADASTRAR NOVO USUÁRIO
-app.post('/v1/user', async (req, res) => {
+app.post('/v1/user', authMiddleware, async (req, res) => {
     const { firstname, surname, email, password, confirmPassword } = req.body;
 // VERIFICANDO OS CAMPOS OBRIGATÓRIOS
     if (!firstname || !surname || !email || !password || !confirmPassword) {
@@ -87,7 +89,7 @@ app.post('/v1/user', async (req, res) => {
   
 
 // ROTA DE ATUALIZAÇÃO DO USUÁRIO
-app.put('/v1/user/:id', async (req, res) => {
+app.put('/v1/user/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     const { firstname, surname, email } = req.body;
   
@@ -111,7 +113,7 @@ app.put('/v1/user/:id', async (req, res) => {
   
 
 // ROTA PARA DELETAR USUÁRIO
-app.delete('/v1/user/:id', async (req, res) => {
+app.delete('/v1/user/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
       try { const user = await User.findByPk(id);
       if (!user) {
@@ -191,7 +193,7 @@ app.get('/v1/category/:id', async (req, res) => {
 
 
 // ROTA PARA CRIAÇÃO DE NOVA CATEGORIA
-app.post('/v1/category', async (req, res) => {
+app.post('/v1/category', authMiddleware, async (req, res) => {
     const { name, slug, use_in_menu } = req.body;
     if (!name || !slug) {return res.status(400).json({ 
         message: 'Nome e slug são obrigatórios.' });
@@ -211,7 +213,7 @@ app.post('/v1/category', async (req, res) => {
 
 
 // ROTA DE ATUALIZAÇÃO DE CATEGORIA
-app.put('/v1/category/:id', async (req, res) => {
+app.put('/v1/category/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     const { name, slug, use_in_menu } = req.body;
     if (!name || !slug) { return res.status(400).json({ 
@@ -234,7 +236,7 @@ app.put('/v1/category/:id', async (req, res) => {
   });
   
 // ROTA PARA DELETAR UMA CATEGORIA
-app.delete('/v1/category/:id', async (req, res) => {
+app.delete('/v1/category/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
       try {
       const category = await Category.findByPk(id);
@@ -391,7 +393,7 @@ app.get('/v1/product/:id', async (req, res) => {
   });
 
 // CRIAÇÃO DO PRODUTO
-app.post('/v1/product', async (req, res) => {
+app.post('/v1/product', authMiddleware, async (req, res) => {
     const {
       enabled,
       name,
@@ -473,7 +475,7 @@ app.post('/v1/product', async (req, res) => {
   });
 
 //ATUALIZAÇÃO DO PRODUTO 
-app.put('/v1/product/:id', async (req, res) => {
+app.put('/v1/product/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     const {
       enabled,
@@ -556,7 +558,7 @@ app.put('/v1/product/:id', async (req, res) => {
   });
 
 // DELETAR PRODUTO
-app.delete('/v1/product/:id', async (req, res) => {
+app.delete('/v1/product/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
       try {
       const product = await Product.findByPk(id);
@@ -572,4 +574,21 @@ app.delete('/v1/product/:id', async (req, res) => {
         message: 'Erro interno do servidor', error: error.message });
     } });
   
+// Endpoint para geração do token JWT
+app.post('/v1/user/token', async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
+  }
+
+  const user = await User.findOne({ where: { email } });
+
+  if (!user || user.password !== password) {
+      return res.status(400).json({ error: 'Invalid email or password' });
+  }
+
+  const token = AuthService.generateToken(user);
+  return res.status(200).json({ token });
+});
 
