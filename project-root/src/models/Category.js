@@ -3,8 +3,6 @@ const sequelize = require('../config/Database');
 
 const Category = sequelize.define('Category', {
 
-    // PRECISO CONFERIR O CODIGO
-
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -21,7 +19,7 @@ const Category = sequelize.define('Category', {
     },
     use_in_menu: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false // Valor padrão definido como 0 (false)
+    defaultValue: false
     }}, {
     timestamps: true 
 });

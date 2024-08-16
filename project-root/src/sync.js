@@ -10,7 +10,7 @@ const ProductCategory = require('./models/ProductCategory');
 
 
 
-//PARA SINCRONIZAR OS COMANDOS DE TABELA
+//PARA FORÇAR A REINICIALIZAÇÃO DA TABELA
 
 sequelize.sync({ force: true })
     .then(() => {

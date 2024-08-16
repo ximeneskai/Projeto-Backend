@@ -9,7 +9,7 @@ const Product = sequelize.define('Product', {
   },
   enabled: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false // Valor padrão definido como 0 (false)
+    defaultValue: false 
   },
   name: {
     type: DataTypes.STRING,
@@ -22,15 +22,15 @@ const Product = sequelize.define('Product', {
   },
   use_in_menu: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false // Valor padrão definido como 0 (false)
+    defaultValue: false
   },
   stock: {
     type: DataTypes.INTEGER,
-    defaultValue: 0 // Valor padrão definido como 0
+    defaultValue: 0
   },
   description: {
     type: DataTypes.STRING,
-    allowNull: true // Coluna opcional
+    allowNull: true 
   },
   price: {
     type: DataTypes.FLOAT,
@@ -41,7 +41,7 @@ const Product = sequelize.define('Product', {
     allowNull: false
   }
 }, {
-  timestamps: true  // Adiciona as colunas created_at e updated_at automaticamente
+  timestamps: true 
 });
 
 module.exports = Product;

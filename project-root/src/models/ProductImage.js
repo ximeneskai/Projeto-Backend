@@ -12,24 +12,25 @@ const ProductImage = sequelize.define('ProductImage', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Product, // Nome do modelo que a chave estrangeira referencia
+      model: Product, 
       key: 'id'
     },
-    onDelete: 'CASCADE' // Remove imagens associadas se o produto for excluído
+    onDelete: 'CASCADE' 
   },
   enabled: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false // Valor padrão definido como 0 (false)
+    defaultValue: false 
   },
   path: {
     type: DataTypes.STRING,
     allowNull: false
   }
 }, {
-  timestamps: true  // Adiciona as colunas created_at e updated_at automaticamente
+  timestamps: true  
 });
 
-// Definindo relacionamento
+// RELACIONAMENTO DE TABELAS 
+
 Product.hasMany(ProductImage, { foreignKey: 'product_id' });
 ProductImage.belongsTo(Product, { foreignKey: 'product_id' });
 

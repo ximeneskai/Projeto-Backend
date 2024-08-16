@@ -5,7 +5,7 @@ const sequelize = new Sequelize({
     database: "projeto",
     host: "localhost",
     username: "root",
-    password: "7721",
+    password: "7721", 
     port: 3306
 });
 

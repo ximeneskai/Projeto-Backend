@@ -12,10 +12,10 @@ const ProductOption = sequelize.define('ProductOption', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Product, // Nome do modelo que a chave estrangeira referencia
+      model: Product, 
       key: 'id'
     },
-    onDelete: 'CASCADE' // Remove opções associadas se o produto for excluído
+    onDelete: 'CASCADE' 
   },
   title: {
     type: DataTypes.STRING,
@@ -40,6 +40,8 @@ const ProductOption = sequelize.define('ProductOption', {
 }, {
   timestamps: true  
 });
+
+// RELACIONAMENTO DE TABELAS
 
 Product.hasMany(ProductOption, { foreignKey: 'product_id' });
 ProductOption.belongsTo(Product, { foreignKey: 'product_id' });

@@ -3,8 +3,6 @@ const sequelize = require('../config/Database');
 
 const User = sequelize.define('User', {
 
-    // PRECISO CONFERIR O CODIGO
-
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,

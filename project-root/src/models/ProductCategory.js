@@ -8,25 +8,26 @@ const ProductCategory = sequelize.define('ProductCategory', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Product, // Nome do modelo que a chave estrangeira referencia
+      model: Product,
       key: 'id'
     },
-    onDelete: 'CASCADE' // Remove o relacionamento se o produto for excluído
+    onDelete: 'CASCADE'
   },
   category_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Category, // Nome do modelo que a chave estrangeira referencia
+      model: Category, 
       key: 'id'
     },
-    onDelete: 'CASCADE' // Remove o relacionamento se a categoria for excluída
+    onDelete: 'CASCADE' 
   }
 }, {
   timestamps: false 
 });
 
-// Definindo relacionamentos muitos-para-muitos
+// RELACIONAMENTO DE TABELAS 
+
 Product.belongsToMany(Category, { through: ProductCategory, foreignKey: 'product_id' });
 Category.belongsToMany(Product, { through: ProductCategory, foreignKey: 'category_id' });
 

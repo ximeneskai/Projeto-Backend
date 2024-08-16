@@ -13,11 +13,13 @@ const authMiddleware = require('./src/middleware/AuthMiddleware');
 require('dotenv').config();
 
 
+
+//Definindo o uso do Express e a Porta
 const app = express();
 const PORT = 3000;
 
 
-// Middleware para parsing JSON - interpreta e converte os dados JSON que chegam no body das requisições HTTP em objetos JavaScript acessíveis no código.
+// Middleware: - interpreta e converte os dados JSON que chegam no body das requisições HTTP em objetos JavaScript acessíveis no código.
 app.use(express.json()); 
 
 
@@ -35,7 +37,7 @@ sequelize.sync()
 
 
 
-//------------------------------------USUARIOS-------------------------------//
+//---------------------------------------------------------USUARIOS---------------------------------------------------------//
 
 // ROTA DE BUSCA DO USUARIO PELO ID
 app.get('/v1/user/:id', async (req, res) => {
